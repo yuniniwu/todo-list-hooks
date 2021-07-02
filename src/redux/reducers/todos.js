@@ -6,11 +6,16 @@ import {
   EDIT_TODO,
 } from '../actionTypes';
 
-let todoId = 0;
-
 const localData = window.localStorage.getItem('todos');
 
 let todos = JSON.parse(localData) || [];
+
+let todoId;
+if (todos.length === 0) {
+  todoId = 0;
+} else {
+  todoId = todos[todos.length - 1].id + 1;
+}
 
 const initialState = { todos };
 

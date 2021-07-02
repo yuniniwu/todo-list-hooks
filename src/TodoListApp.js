@@ -135,6 +135,7 @@ export default function TodoListApp() {
         <FilterButton handleFilter={handleFilter} value={filterType} />
 
         <ListGroup>
+          {console.log(filterValue.length)}
           {filterValue.map((todo) => (
             <TodoItem
               key={todo.id}

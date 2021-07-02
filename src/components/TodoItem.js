@@ -83,8 +83,8 @@ const ButtonTodo = styled(ButtonDelete)`
 export default function TodoItem({
   todo,
   handleDeleteItem,
-  toggleIsDone,
-  editTodo,
+  handleToggleIsDone,
+  handleEditTodo,
 }) {
   const { id, content, isDone } = todo;
   const [toggle, setToggle] = useState(true);
@@ -95,12 +95,12 @@ export default function TodoItem({
   };
 
   const handleTogglerClick = () => {
-    toggleIsDone(id);
+    handleToggleIsDone(id);
   };
 
   const handleTodoEdit = (e) => {
     const newContent = e.target.value;
-    editTodo(newContent, id);
+    handleEditTodo(newContent, id);
     setText(newContent);
   };
 
@@ -143,8 +143,8 @@ export default function TodoItem({
 }
 
 TodoItem.propTypes = {
-  todo: PropTypes.object,
-  handleDeleteItem: PropTypes.func,
-  toggleIsDone: PropTypes.func,
-  editTodo: PropTypes.func,
+  todo: PropTypes.object.isRequired,
+  handleDeleteItem: PropTypes.func.isRequired,
+  handleToggleIsDone: PropTypes.func.isRequired,
+  handleEditTodo: PropTypes.func.isRequired,
 };
