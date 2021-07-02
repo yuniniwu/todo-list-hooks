@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { VISIBILITY_FILTERS } from '../constants/filterButton';
 
 const ButtonGroup = styled.div`
   margin: 0.2rem 0;
@@ -30,19 +31,21 @@ const ButtonFilter = styled(Button)`
   padding: 0.2rem 0.4rem;
 `;
 
-export default function FilterButton({ handleFilter, value }) {
+export default function FilterButton({ handleFilter }) {
   return (
     <ButtonGroup>
-      {value.map((filterType) => (
-        <ButtonFilter key={filterType} onClick={handleFilter}>
-          {filterType}
-        </ButtonFilter>
-      ))}
+      {Object.keys(VISIBILITY_FILTERS).map((filterType) => {
+        const currentFilter = VISIBILITY_FILTERS[filterType];
+        return (
+          <ButtonFilter key={currentFilter} onClick={handleFilter}>
+            {currentFilter}
+          </ButtonFilter>
+        );
+      })}
     </ButtonGroup>
   );
 }
 
 FilterButton.propTypes = {
-  value: PropTypes.array,
-  handleFilter: PropTypes.func,
+  handleFilter: PropTypes.func.isRequired,
 };

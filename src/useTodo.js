@@ -1,4 +1,14 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectTodos, getTodosByFilter } from './redux/selectors';
+import {
+  addTodo,
+  deleteTodo,
+  toggleTodo,
+  clearCompleted,
+  editTodo,
+  filterTodo,
+} from './redux/actions';
 
 const saveTodosToLocalStorage = (todos) => {
   window.localStorage.setItem('todos', JSON.stringify(todos));
@@ -9,28 +19,28 @@ const handleTodoCounter = (todos) => {
 };
 
 export default function useTodo() {
-  const localData = window.localStorage.getItem('todos');
-  const id = useRef(1);
-
-  const [todos, setTodos] = useState(() => {
-    let todoData = localData || '';
-    if (todoData) {
-      todoData = JSON.parse(todoData);
-    } else {
-      todoData = [];
-    }
-    return todoData;
-  });
+  // const [todos, setTodos] = useState(() => {
+  //   let todoData = localData || '';
+  //   if (todoData) {
+  //     todoData = JSON.parse(todoData);
+  //   } else {
+  //     todoData = [];
+  //   }
+  //   return todoData;
+  // });
   const [inputValue, setInputValue] = useState('');
-  const [filterValue, setFilterValue] = useState(todos);
-  const filterType = ['All', 'Done', 'to Do'];
+  const todos = useSelector(selectTodos);
+  const filterValue = useSelector(getTodosByFilter);
+  const dispatch = useDispatch();
+  // const [filterValue, setFilterValue] = useState(todos);
+  // const filterType = ['All', 'Done', 'to Do'];
 
   // 計算未完成 todo item數量
   const todoCounter = useMemo(() => handleTodoCounter(todos), [todos]);
 
   useEffect(() => {
     saveTodosToLocalStorage(todos);
-    setFilterValue(todos);
+    // setFilterValue(todos);
   }, [todos]);
 
   const handleInputChange = (e) => {
@@ -39,85 +49,53 @@ export default function useTodo() {
 
   const handleAddItem = useCallback(() => {
     if (!inputValue) return;
-
-    setTodos([
-      {
-        id: id.current,
-        content: inputValue,
-        isDone: false,
-      },
-      ...todos,
-    ]);
-
+    dispatch(addTodo(inputValue));
     setInputValue('');
-    id.current++;
-  }, [todos, inputValue]);
+  }, [inputValue, dispatch]);
 
   const handleDeleteItem = useCallback(
     (id) => {
-      setTodos(todos.filter((todo) => todo.id !== id));
+      dispatch(deleteTodo(id));
     },
-    [todos]
+    [dispatch]
   );
 
   const handleClearCompletedItem = useCallback(() => {
-    setTodos(todos.filter((todo) => !todo.isDone));
-  }, [todos]);
+    dispatch(clearCompleted());
+  }, [dispatch]);
 
-  const toggleIsDone = useCallback(
+  const handleToggleIsDone = useCallback(
     (id) => {
-      setTodos(
-        todos.map((todo) => {
-          if (todo.id !== id) return todo;
-          return {
-            ...todo,
-            isDone: !todo.isDone,
-          };
-        })
-      );
+      dispatch(toggleTodo(id));
     },
-    [todos]
+    [dispatch]
   );
 
-  const editTodo = (input, id) => {
-    setTodos(
-      todos.map((todo) => {
-        if (todo.id !== id) return todo;
-        return {
-          ...todo,
-          content: input,
-        };
-      })
-    );
-  };
+  const handleEditTodo = useCallback(
+    (id, content) => {
+      dispatch(editTodo(id, content));
+    },
+    [dispatch]
+  );
 
   const handleFilter = useCallback(
     (e) => {
-      const selectedItem = e.target.innerText;
-      if (selectedItem === 'All') {
-        setFilterValue(todos);
-      }
-      if (selectedItem === 'Done') {
-        setFilterValue(todos.filter((todo) => todo.isDone));
-      }
-      if (selectedItem === 'to Do') {
-        setFilterValue(todos.filter((todo) => !todo.isDone));
-      }
+      const selectedFilter = e.target.innerText;
+      dispatch(filterTodo(selectedFilter));
     },
-    [todos]
+    [dispatch]
   );
 
   return {
     inputValue,
     filterValue,
-    filterType,
     todoCounter,
-    editTodo,
+    handleEditTodo,
     handleFilter,
     handleAddItem,
     handleInputChange,
     handleDeleteItem,
-    toggleIsDone,
+    handleToggleIsDone,
     handleClearCompletedItem,
   };
 }

@@ -115,9 +115,9 @@ export default function TodoListApp() {
     handleAddItem,
     handleInputChange,
     handleDeleteItem,
-    toggleIsDone,
+    handleToggleIsDone,
     handleClearCompletedItem,
-    editTodo,
+    handleEditTodo,
   } = useTodo();
 
   return (
@@ -140,8 +140,8 @@ export default function TodoListApp() {
               key={todo.id}
               todo={todo}
               handleDeleteItem={handleDeleteItem}
-              toggleIsDone={toggleIsDone}
-              editTodo={editTodo}
+              handleToggleIsDone={handleToggleIsDone}
+              handleEditTodo={handleEditTodo}
             />
           ))}
         </ListGroup>
@@ -164,7 +164,7 @@ TodoListApp.propTypes = {
   handleAddItem: PropTypes.func,
   handleInputChange: PropTypes.func,
   handleDeleteItem: PropTypes.func,
-  toggleIsDone: PropTypes.func,
+  handleToggleIsDone: PropTypes.func,
   handleClearCompletedItem: PropTypes.func,
-  editTodo: PropTypes.func,
+  handleEditTodo: PropTypes.func,
 };
