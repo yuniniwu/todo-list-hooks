@@ -3,7 +3,6 @@ import { MEDIA_QUERY_S } from './constants/style.js';
 import TodoItem from './components/TodoItem';
 import FilterButton from './components/FilterButton';
 import useTodo from './useTodo';
-import PropTypes from 'prop-types';
 
 const Container = styled.div`
   ${MEDIA_QUERY_S} {
@@ -109,15 +108,14 @@ export default function TodoListApp() {
   const {
     inputValue,
     filterValue,
-    filterType,
     todoCounter,
+    handleEditTodo,
     handleFilter,
     handleAddItem,
     handleInputChange,
     handleDeleteItem,
     handleToggleIsDone,
     handleClearCompletedItem,
-    handleEditTodo,
   } = useTodo();
 
   return (
@@ -126,16 +124,15 @@ export default function TodoListApp() {
       <Card>
         <InputArea>
           <TextInput
-            placeholder='enter your todo item'
+            placeholder='todo'
             onChange={handleInputChange}
             value={inputValue}
           ></TextInput>
           <Button onClick={handleAddItem}>新增</Button>
         </InputArea>
-        <FilterButton handleFilter={handleFilter} value={filterType} />
+        <FilterButton handleFilter={handleFilter} />
 
         <ListGroup>
-          {console.log(filterValue.length)}
           {filterValue.map((todo) => (
             <TodoItem
               key={todo.id}
@@ -155,17 +152,3 @@ export default function TodoListApp() {
     </Container>
   );
 }
-
-TodoListApp.propTypes = {
-  inputValue: PropTypes.array,
-  filterValue: PropTypes.array,
-  filterType: PropTypes.array,
-  todoCounter: PropTypes.array,
-  handleFilter: PropTypes.func,
-  handleAddItem: PropTypes.func,
-  handleInputChange: PropTypes.func,
-  handleDeleteItem: PropTypes.func,
-  handleToggleIsDone: PropTypes.func,
-  handleClearCompletedItem: PropTypes.func,
-  handleEditTodo: PropTypes.func,
-};

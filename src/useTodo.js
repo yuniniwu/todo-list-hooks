@@ -19,28 +19,16 @@ const handleTodoCounter = (todos) => {
 };
 
 export default function useTodo() {
-  // const [todos, setTodos] = useState(() => {
-  //   let todoData = localData || '';
-  //   if (todoData) {
-  //     todoData = JSON.parse(todoData);
-  //   } else {
-  //     todoData = [];
-  //   }
-  //   return todoData;
-  // });
   const [inputValue, setInputValue] = useState('');
   const todos = useSelector(selectTodos);
   const filterValue = useSelector(getTodosByFilter);
   const dispatch = useDispatch();
-  // const [filterValue, setFilterValue] = useState(todos);
-  // const filterType = ['All', 'Done', 'to Do'];
 
-  // 計算未完成 todo item數量
+  // 計算未完成 todo item 數量
   const todoCounter = useMemo(() => handleTodoCounter(todos), [todos]);
 
   useEffect(() => {
     saveTodosToLocalStorage(todos);
-    // setFilterValue(todos);
   }, [todos]);
 
   const handleInputChange = (e) => {

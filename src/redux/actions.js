@@ -28,10 +28,9 @@ export const toggleTodo = (id) => ({
   },
 });
 
-// TODO: check
 export const clearCompleted = (id) => ({
   type: CLEAR_COMPLETED,
-  payload: { id },
+  // payload: { id },
 });
 
 export const editTodo = (id, content) => ({
