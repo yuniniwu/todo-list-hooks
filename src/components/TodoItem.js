@@ -87,8 +87,8 @@ export default function TodoItem({
   handleEditTodo,
 }) {
   const { id, content, isDone } = todo;
-  const [toggle, setToggle] = useState(true);
-  const [text, setText] = useState(content);
+  const [toggleEdit, setToggleEdit] = useState(true);
+  const [newText, setNewText] = useState(content);
 
   const handleDeleteClick = () => {
     handleDeleteItem(id);
@@ -98,19 +98,19 @@ export default function TodoItem({
     handleToggleIsDone(id);
   };
 
-  const handleTodoEdit = (e) => {
+  const handleEditChange = (e) => {
     const newContent = e.target.value;
-    handleEditTodo(newContent, id);
-    setText(newContent);
+    handleEditTodo(id, newContent);
+    setNewText(newContent);
   };
 
   return (
-    <ListItem data-id={id}>
-      {toggle ? (
+    <ListItem>
+      {toggleEdit ? (
         <TodoContent
           $isDone={isDone}
           onDoubleClick={() => {
-            setToggle(false);
+            setToggleEdit(false);
           }}
         >
           {content}
@@ -118,13 +118,11 @@ export default function TodoItem({
       ) : (
         <EditContent
           type='text'
-          value={text}
-          onChange={handleTodoEdit}
+          value={newText}
+          onChange={handleEditChange}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === 'Escape') {
-              setToggle(true);
-              e.preventDefault();
-              e.stopPropagation();
+            if (e.key === 'Enter') {
+              setToggleEdit(true);
             }
           }}
         />
